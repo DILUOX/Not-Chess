@@ -3,6 +3,7 @@
 #include <string>
 #include <cstdlib>
 #include <cmath>
+#include "menu.hpp"
 using namespace genv;
 using namespace std;
 

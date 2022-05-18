@@ -30,7 +30,7 @@ void generate_buttons(menu* m,int db,string& titles){           //tettszoleges m
 }
 
 
-void run(menu* m,Jatek* not_chess)           //maga a teljes jatek
+void run(menu* m,Jatek* not_chess,Graphics_engine * gmotor)           //maga a teljes jatek
 {
 
     string buttonnames="Új játék;Kilépés";
@@ -39,7 +39,7 @@ void run(menu* m,Jatek* not_chess)           //maga a teljes jatek
     m->start_application();
     not_chess->indit();
 
-
+    int signal_=0;
 
     bool gamerun=0;
     while(ev.keycode!=key_escape)
@@ -51,6 +51,7 @@ void run(menu* m,Jatek* not_chess)           //maga a teljes jatek
             {
                 gamerun=1;
                 torol(wx,wy,0,0,0);                   //elindul a jatek
+                signal_=0;
             }
             else if(not_chess->veresegvan==0){
                 m->run_(ev);
@@ -59,22 +60,22 @@ void run(menu* m,Jatek* not_chess)           //maga a teljes jatek
                 buttonnames="Új játék;Kilépés";
                 generate_buttons(m,2,buttonnames);
                 not_chess->indit();
-            }
+          }
 
         }
         else
         {
-            if(not_chess->futtatas(ev)==-1){
-                gamerun=0;
+            if(signal_==0){
+                signal_=-1;
+                gmotor->start_application();
             }
-            torol(wx,wy,203 , 140, 111);
-            not_chess->rajzolas();
+             gmotor->run_();
+           // torol(wx,wy,203 , 140, 111);
             if(ev.keyname=="F1"){
                 buttonnames="Folytatás;Kilépés"; //a futo jatekbol az esc billentyuvel lehet kilepni
                 generate_buttons(m,2,buttonnames);
                 gamerun=0;
                 m->main_menu_logo->rajz(0,0);
-
             }
         }
 
@@ -90,7 +91,8 @@ int main()
 {
     menu* main_menu= new menu(wx,wy,"Kígyó károly");
     Jatek* not_chess=new Jatek(wx,wy);
-    run(main_menu,not_chess);
+    Graphics_engine * grafikus_motor = new Graphics_engine(wx,wy);
+    run(main_menu,not_chess,grafikus_motor);
     delete main_menu;
     delete not_chess;
     return 0;

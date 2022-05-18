@@ -25,13 +25,26 @@ public:
         }
         f.close();
     }
+     kep(std::string kepnev,int x_, int y_){
+        std::ifstream f(kepnev);
+        f>>szel>>mag;
+        std::cout<<szel<<" x "<<mag<<std::endl;
+        for(int y=0;y<mag;y++){
+            for(int x=0;x<szel;x++){
+                pixel p(x+x_,y+y_,f);
+                keppontok.push_back(p);
+            }
+        }
+        f.close();
+    }
     ~kep(){
         keppontok.erase(keppontok.begin(),keppontok.end());
     }
     void rajz(int rajz_helye_x, int rajz_helye_y)const;
-protected:
     int szel,mag;
     std::vector<pixel> keppontok;
+protected:
+
 };
 
 #endif // KEP_HPP
